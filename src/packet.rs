@@ -167,7 +167,7 @@ impl MspParser {
 
 				if self.packet_data.len() == 2 {
 					let mut s = [0; 8];
-					s[0..2].copy_from_slice(&self.packet_data);
+					s[5..7].copy_from_slice(&self.packet_data);
 					self.packet_data_length_remaining = usize::from_le_bytes(s);
 					self.packet_crc_v2.digest(&self.packet_data);
 					self.packet_data = Vec::with_capacity(self.packet_data_length_remaining as usize);
