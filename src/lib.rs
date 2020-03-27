@@ -12,6 +12,8 @@ extern crate alloc;
 
 extern crate packed_struct;
 
+extern crate crc_any;
+
 #[macro_use]
 extern crate packed_struct_codegen;
 

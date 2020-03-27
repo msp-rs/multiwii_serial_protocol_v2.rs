@@ -1,4 +1,6 @@
 use prelude::v1::*;
+use crc_any::CRCu8;
+
 
 /// Packet parsing error
 #[derive(Copy, Clone, Debug, PartialEq)]
@@ -38,7 +40,7 @@ impl MspPacketDirection {
 #[derive(Debug, Clone, PartialEq)]
 /// A decoded MSP packet, with a command code, direction and payload
 pub struct MspPacket<'a> {
-	pub cmd: u8,
+	pub cmd: u16,
 	pub direction: MspPacketDirection,
 	pub data: Cow<'a, [u8]>
 }
@@ -48,33 +50,47 @@ enum MspParserState {
 	Header1,
 	Header2,
 	Direction,
+	FlagV2,
 	DataLength,
+	DataLengthV2,
 	Command,
+	CommandV2,
 	Data,
-	Crc
+	DataV2,
+	Crc,
+}
+
+#[derive(Copy, Clone, PartialEq, Debug)]
+enum MSPVersion {
+		V1,
+		V2,
 }
 
 #[derive(Debug)]
 /// Parser that can find packets from a raw byte stream
 pub struct MspParser {
 	state: MspParserState,
+	packet_version: MSPVersion,
 	packet_direction: MspPacketDirection,
-	packet_cmd: u8,
+	packet_cmd: u16,
 	packet_data_length_remaining: usize,
 	packet_data: Vec<u8>,
-	packet_crc: u8
+	packet_crc: u8,
+	packet_crc_v2: CRCu8,
 }
 
 impl MspParser {
 	/// Create a new parser
 	pub fn new() -> MspParser {
-		MspParser {
+		Self {
 			state: MspParserState::Header1,
+			packet_version: MSPVersion::V1,
 			packet_direction: MspPacketDirection::ToFlightController,
 			packet_data_length_remaining: 0,
 			packet_cmd: 0,
 			packet_data: Vec::new(),
-			packet_crc: 0
+			packet_crc: 0,
+			packet_crc_v2: CRCu8::crc8dvb_s2(),
 		}
 	}
 
@@ -96,29 +112,84 @@ impl MspParser {
 			},
 
 			MspParserState::Header2 => {
-				if input == ('M' as u8) {
-					self.state = MspParserState::Direction;
-				} else {
-					self.reset();
-				}
+				self.packet_version = match input as char {
+					'M' => MSPVersion::V1,
+					'X' => MSPVersion::V2,
+					_=> {
+						self.reset();
+						return Ok(None);
+					},
+				};
+
+				self.state = MspParserState::Direction;
 			},
 
 			MspParserState::Direction => {
 				match input {
-					60 => self.packet_direction = MspPacketDirection::ToFlightController,
-					62 => self.packet_direction = MspPacketDirection::FromFlightController,
-					33 => self.packet_direction = MspPacketDirection::Unsupported,
+					60 => self.packet_direction = MspPacketDirection::ToFlightController, // '>'
+					62 => self.packet_direction = MspPacketDirection::FromFlightController, // '<'
+					33 => self.packet_direction = MspPacketDirection::Unsupported, // '!' error
 					_ => {
 						self.reset();
 						return Ok(None);
 					}
 				}
 
-				self.state = MspParserState::DataLength;
+				self.state = match self.packet_version {
+					MSPVersion::V1 => MspParserState::DataLength,
+					MSPVersion::V2 => MspParserState::FlagV2,
+				};
+			},
+
+			MspParserState::FlagV2 => {
+				// uint8, flag, usage to be defined (set to zero)
+				self.state = MspParserState::CommandV2;
+				self.packet_data = Vec::with_capacity(2);
+				self.packet_crc_v2.digest(&[input]);
+			},
+
+			MspParserState::CommandV2 => {
+				self.packet_data.push(input);
+
+				if self.packet_data.len() == 2 {
+					let mut s = [0; 2];
+					s.copy_from_slice(&self.packet_data);
+					self.packet_cmd = u16::from_le_bytes(s);
+
+					self.packet_crc_v2.digest(&self.packet_data);
+					self.packet_data.clear();
+					self.state = MspParserState::DataLengthV2;
+				}
+			},
+
+			MspParserState::DataLengthV2 => {
+				self.packet_data.push(input);
+
+				if self.packet_data.len() == 2 {
+					let mut s = [0; 8];
+					s[0..2].copy_from_slice(&self.packet_data);
+					self.packet_data_length_remaining = usize::from_le_bytes(s);
+					self.packet_crc_v2.digest(&self.packet_data);
+					self.packet_data = Vec::with_capacity(self.packet_data_length_remaining as usize);
+
+					if self.packet_data_length_remaining == 0 {
+						self.state = MspParserState::Crc;
+					} else {
+						self.state = MspParserState::DataV2;
+					}
+				}
+			},
+
+			MspParserState::DataV2 => {
+				self.packet_data.push(input);
+				self.packet_data_length_remaining -= 1;
+
+				if self.packet_data_length_remaining == 0 {
+					self.state = MspParserState::Crc;
+				}
 			},
 
 			MspParserState::DataLength => {
-
 				self.packet_data_length_remaining = input as usize;
 				self.state = MspParserState::Command;
 				self.packet_crc ^= input;
@@ -127,7 +198,7 @@ impl MspParser {
 
 			MspParserState::Command => {
 
-				self.packet_cmd = input;
+				self.packet_cmd = input as u16;
 
 				if self.packet_data_length_remaining == 0 {
 					self.state = MspParserState::Crc;
@@ -153,6 +224,10 @@ impl MspParser {
 			},
 
 			MspParserState::Crc => {
+				if self.packet_version == MSPVersion::V2	{
+					self.packet_crc_v2.digest(&self.packet_data);
+					self.packet_crc = self.packet_crc_v2.get_crc();
+				}
 
 				let packet_crc = self.packet_crc;
 				if input != packet_crc {
@@ -186,6 +261,7 @@ impl MspParser {
 		self.packet_cmd = 0;
 		self.packet_data.clear();
 		self.packet_crc = 0;
+		self.packet_crc_v2.reset();
 	}
 }
 
@@ -193,6 +269,11 @@ impl<'a> MspPacket<'a> {
 	/// Number of bytes that this packet requires to be packed
 	pub fn packet_size_bytes(&self) -> usize {
 		6 + self.data.len()
+	}
+
+	/// Number of bytes that this packet requires to be packed
+	pub fn packet_size_bytes_v2(&self) -> usize {
+		 9 + self.data.len()
 	}
 
 	/// Serialize to network bytes
@@ -207,7 +288,7 @@ impl<'a> MspPacket<'a> {
 		output[1] = 'M' as u8;
 		output[2] = self.direction.to_byte();
 		output[3] = self.data.len() as u8;
-		output[4] = self.cmd;
+		output[4] = self.cmd as u8;
 
 
 		output[5..l - 1].copy_from_slice(&self.data);
@@ -217,6 +298,30 @@ impl<'a> MspPacket<'a> {
 			crc ^= *b;
 		}
 		output[l - 1] = crc;
+
+		Ok(())
+	}
+
+	/// Serialize to network bytes
+	pub fn serialize_v2(&self, output: &mut [u8]) -> Result<(), MspPacketParseError> {
+		let l = output.len();
+
+		if l != self.packet_size_bytes_v2() {
+			return Err(MspPacketParseError::OutputBufferSizeMismatch);
+		}
+
+		output[0] = '$' as u8;
+		output[1] = 'X' as u8;
+		output[2] = self.direction.to_byte();
+		output[3] = 0;
+		output[4..6].copy_from_slice(&self.cmd.to_le_bytes());
+		output[6..8].copy_from_slice(&(self.data.len() as u16).to_le_bytes());
+
+		output[8..l - 1].copy_from_slice(&self.data);
+
+		let mut crc = CRCu8::crc8dvb_s2();
+		crc.digest(&output[3..l - 1]);
+		output[l - 1] = crc.get_crc();
 
 		Ok(())
 	}
