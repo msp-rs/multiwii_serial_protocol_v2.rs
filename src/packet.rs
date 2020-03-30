@@ -39,10 +39,10 @@ impl MspPacketDirection {
 
 #[derive(Debug, Clone, PartialEq)]
 /// A decoded MSP packet, with a command code, direction and payload
-pub struct MspPacket<'a> {
+pub struct MspPacket {
 	pub cmd: u16,
 	pub direction: MspPacketDirection,
-	pub data: Cow<'a, [u8]>
+	pub data: Vec<u8>
 }
 
 #[derive(Copy, Clone, PartialEq, Debug)]
@@ -101,7 +101,7 @@ impl MspParser {
 
 	/// Parse the next input byte. Returns a valid packet whenever a full packet is received, otherwise
 	/// restarts the state of the parser.
-	pub fn parse<'b>(&mut self, input: u8) -> Result<Option<MspPacket<'b>>, MspPacketParseError> {
+	pub fn parse(&mut self, input: u8) -> Result<Option<MspPacket>, MspPacketParseError> {
 		match self.state {
 			MspParserState::Header1 => {
 				if input == ('$' as u8) {
@@ -167,7 +167,7 @@ impl MspParser {
 
 				if self.packet_data.len() == 2 {
 					let mut s = [0; 8];
-					s[5..7].copy_from_slice(&self.packet_data);
+					s[0..2].copy_from_slice(&self.packet_data);
 					self.packet_data_length_remaining = usize::from_le_bytes(s);
 					self.packet_crc_v2.digest(&self.packet_data);
 					self.packet_data = Vec::with_capacity(self.packet_data_length_remaining as usize);
@@ -241,7 +241,7 @@ impl MspParser {
 				let packet = MspPacket {
 					cmd: self.packet_cmd,
 					direction: self.packet_direction,
-					data: Cow::Owned(n)
+					data: n
 				};
 
 				self.reset();
@@ -254,7 +254,7 @@ impl MspParser {
 		Ok(None)
 	}
 
-	fn reset(&mut self) {
+	pub fn reset(&mut self) {
 		self.state = MspParserState::Header1;
 		self.packet_direction = MspPacketDirection::ToFlightController;
 		self.packet_data_length_remaining = 0;
@@ -265,7 +265,7 @@ impl MspParser {
 	}
 }
 
-impl<'a> MspPacket<'a> {
+impl MspPacket {
 	/// Number of bytes that this packet requires to be packed
 	pub fn packet_size_bytes(&self) -> usize {
 		6 + self.data.len()
