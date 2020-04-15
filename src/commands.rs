@@ -57,6 +57,9 @@ pub enum MspCommandCode {
     MSP_TRANSPONDER_CONFIG =      82,
     MSP_SET_TRANSPONDER_CONFIG =  83,
 
+    MSP_OSD_CONFIG =              84, //out message         Get osd settings - baseflight
+    MSP_SET_OSD_CONFIG =          85, //in message          Set osd settings - baseflight
+
     MSP_LED_STRIP_MODECOLOR =     127,
     MSP_SET_LED_STRIP_MODECOLOR = 221,
     
@@ -157,5 +160,11 @@ pub enum MspCommandCode {
     MSP_SET_PID_ADVANCED =           95,
 
     MSP_SENSOR_CONFIG =              96,
-    MSP_SET_SENSOR_CONFIG =          97
+    MSP_SET_SENSOR_CONFIG =          97,
+
+    MSP2_MOTOR_MIXER =               0x1005,
+    MSP2_SET_MOTOR_MIXER =           0x1006,
+
+    MSP2_SERIAL_CONFIG =             0x1009,
+    MSP2_SET_SERIAL_CONFIG =         0x100A,
 }
