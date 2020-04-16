@@ -126,6 +126,20 @@ pub struct MspDataFlashSummaryReply {
 }
 
 #[derive(PackedStruct, Serialize, Deserialize,  Debug, Copy, Clone)]
+#[packed_struct(bytes="1", endian="lsb", bit_numbering="msb0")]
+pub struct MspDataFlashReply {
+    pub read_address: u32,
+    // pub payload: Vec<u8>,
+}
+
+#[derive(PackedStruct, Debug, Copy, Clone)]
+#[packed_struct(bytes = "6", endian = "lsb", bit_numbering = "msb0")]
+pub struct MspDataFlashRead {
+    pub read_address: u32,
+    pub read_length: u16,
+}
+
+#[derive(PackedStruct, Serialize, Deserialize,  Debug, Copy, Clone)]
 #[packed_struct(endian="lsb")]
 pub struct MspAccTrim {
     pub pitch: u16,
@@ -424,6 +438,24 @@ pub struct MspMixerConfig {
     pub mixer_mode: MixerMode
 }
 
+#[derive(PackedStruct, Debug, Copy, Clone)]
+#[packed_struct(bytes = "4", endian = "lsb", bit_numbering = "msb0")]
+pub struct MspModeRange {
+    pub box_id: u8,
+    #[packed_field(size_bits="8", ty="enum")]
+    pub aux_channel_index: MspRcChannel,
+    pub start_step: u8,
+    pub end_step: u8,
+}
+
+#[derive(PackedStruct, Debug, Copy, Clone)]
+#[packed_struct(bytes = "5", endian = "lsb", bit_numbering = "msb0")]
+pub struct MspSetModeRange {
+    pub index: u8,
+    #[packed_field(size_bytes="4")]
+    pub mode_range: MspModeRange,
+}
+
 #[derive(PrimitiveEnum, Serialize, Deserialize, Debug, Copy, Clone, PartialEq)]
 pub enum MixerMode {
     Tri = 1,
@@ -437,6 +469,96 @@ pub enum MixerMode {
     Y4 = 9,
     Hex6X = 10,
     OctoX8 = 11
+}
+
+#[derive(PackedStruct, Debug, Copy, Clone)]
+#[packed_struct(bytes = "8", endian = "lsb", bit_numbering = "msb0")]
+pub struct MspMotorMixer {
+    pub throttle: u16,
+    pub roll: u16,
+    pub pitch: u16,
+    pub yaw: u16,
+}
+
+#[derive(PackedStruct, Debug, Copy, Clone)]
+#[packed_struct(bytes = "9", endian = "lsb", bit_numbering = "msb0")]
+pub struct MspSetMotorMixer {
+    pub index: u8,
+    #[packed_field(size_bytes="8")]
+    pub motor_mixer: MspMotorMixer,
+}
+
+#[derive(PackedStruct, Debug, Copy, Clone)]
+#[packed_struct(bytes = "13", endian = "lsb", bit_numbering = "msb0")]
+pub struct OsdConfig {
+    pub video_system: u8,
+    pub units: u8,
+    pub rssi_alarm: u8,
+    pub capacity_warning: u16,
+    pub time_alarm: u16,
+    pub alt_alarm: u16,
+    pub dist_alarm: u16,
+    pub neg_alt_alarm: u16,
+}
+
+#[derive(PackedStruct, Debug, Copy, Clone)]
+#[packed_struct(bytes = "1", endian = "lsb", bit_numbering = "msb0")]
+pub struct MspSetGetOsdConfig {
+    pub item_index: u8,
+    #[packed_field(size_bytes="13")]
+    pub config: OsdConfig,
+}
+
+#[derive(PackedStruct, Debug, Copy, Clone)]
+#[packed_struct(bytes = "2", endian = "lsb", bit_numbering = "msb0")]
+pub struct OsdItemPosition {
+    pub col: u8,
+    pub row: u8,
+}
+
+#[derive(PackedStruct, Debug, Copy, Clone)]
+#[packed_struct(bytes = "1", endian = "lsb", bit_numbering = "msb0")]
+pub struct MspSetOsdLayout {
+    pub item_index: u8,
+    #[packed_field(size_bytes="2")]
+    pub item: OsdItemPosition,
+}
+
+#[derive(Debug)]
+pub struct OsdSettings {
+    pub osd_support: u8,
+    pub config: OsdConfig,
+    pub item_positions: Vec<OsdItemPosition>,
+}
+
+#[derive(PackedStruct, Debug, Copy, Clone)]
+#[packed_struct(endian = "lsb", bit_numbering = "msb0")]
+pub struct SerialSetting {
+    pub index: u8,
+    pub function_mask: u32,
+    pub msp_baudrate_index: u8,
+    pub gps_baudrate_index: u8,
+    pub telemetry_baudrate_index: u8,
+    pub peripheral_baudrate_index: u8,
+}
+
+#[derive(PackedStruct, Debug, Copy, Clone)]
+#[packed_struct(endian = "lsb", bit_numbering = "msb0")]
+pub struct MspServoMixRule {
+    pub index: u8,
+    pub target_channel: u8,
+    pub input_source: u8,
+    pub rate: u8,
+    pub speed: u8,
+    pub min: u8,
+    pub max: u8,
+    pub box_id: u8,
+}
+
+#[derive(PackedStruct, Debug, Copy, Clone)]
+#[packed_struct(endian = "lsb", bit_numbering = "msb0")]
+pub struct MspRxMap {
+    pub map: [u8; 4], // MAX_MAPPABLE_RX_INPUTS
 }
 
 #[test]
