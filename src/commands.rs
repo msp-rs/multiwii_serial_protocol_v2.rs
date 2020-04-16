@@ -1,4 +1,4 @@
-#[derive(PrimitiveEnum_u8)]
+#[derive(PrimitiveEnum)]
 #[derive(Debug, Copy, Clone, PartialEq)]
 #[allow(non_camel_case_types)]
 

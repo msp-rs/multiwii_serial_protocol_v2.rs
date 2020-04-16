@@ -279,7 +279,7 @@ pub struct MspRcChannelValue {
     pub value: u16
 }
 
-#[derive(PrimitiveEnum_u8, Serialize, Deserialize, Debug, Copy, Clone, PartialEq)]
+#[derive(PrimitiveEnum, Serialize, Deserialize, Debug, Copy, Clone, PartialEq)]
 pub enum MspRcChannel {
     /// Ailerons
     Roll = 0,
@@ -424,7 +424,7 @@ pub struct MspMixerConfig {
     pub mixer_mode: MixerMode
 }
 
-#[derive(PrimitiveEnum_u8, Serialize, Deserialize, Debug, Copy, Clone, PartialEq)]
+#[derive(PrimitiveEnum, Serialize, Deserialize, Debug, Copy, Clone, PartialEq)]
 pub enum MixerMode {
     Tri = 1,
     QuadPlus = 2,
