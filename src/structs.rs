@@ -129,7 +129,7 @@ pub struct MspDataFlashSummaryReply {
 #[packed_struct(bytes="1", endian="lsb", bit_numbering="msb0")]
 pub struct MspDataFlashReply {
     pub read_address: u32,
-    // pub payload: Vec<u8>,
+    // pub payload: Vec<u8>, // TODO: packed_struct should support dynamic size too the end
 }
 
 #[derive(PackedStruct, Debug, Copy, Clone)]
@@ -559,6 +559,72 @@ pub struct MspServoMixRule {
 #[packed_struct(endian = "lsb", bit_numbering = "msb0")]
 pub struct MspRxMap {
     pub map: [u8; 4], // MAX_MAPPABLE_RX_INPUTS
+}
+
+#[derive(PackedStruct, Debug, Copy, Clone)]
+#[packed_struct(endian = "lsb", bit_numbering = "msb0")]
+pub struct MspSettingGroup {
+    pub group_id: u16,
+    pub start_id: u16,
+    pub end_id: u16,
+}
+
+#[derive(PackedStruct, Debug, Copy, Clone)]
+#[packed_struct(endian = "lsb", bit_numbering = "msb0")]
+pub struct MspSettingInfoRequest {
+    pub null: u8,
+    pub id: u16,
+}
+
+
+
+#[derive(PrimitiveEnum, Serialize, Deserialize, Debug, Copy, Clone, PartialEq)]
+pub enum SettingMode {
+    ModeDirect = 0,
+    ModeLookup = 0x40,
+}
+
+#[derive(PrimitiveEnum, Serialize, Deserialize, Debug, Copy, Clone, PartialEq)]
+pub enum SettingType {
+    VarUint8 = 0,
+    VarInt8 = 1,
+    VarUint16 = 2,
+    VarInt16 = 3,
+    VarUint32 = 4,
+    VarFloat = 5,
+    VarString = 6,
+}
+
+#[derive(PackedStruct, Debug, Copy, Clone)]
+#[packed_struct(bytes = "15", endian = "lsb", bit_numbering = "msb0")]
+pub struct MspSettingInfo {
+    // pub name: [u8; ?], null terminated strings
+
+    // Parameter Group ID
+    pub group_id: u16,
+
+    // Type, section and mode
+    #[packed_field(size_bits="8", ty="enum")]
+    pub section_type: SettingType,
+    pub setting_section: u8,
+    #[packed_field(size_bits="8", ty="enum")]
+    pub setting_mode: SettingMode,
+
+    pub min: u32,
+    pub max: u32,
+
+    // Absolute setting index
+    pub absolute_index: u16,
+
+    // If the setting is profile based, send the current one
+    // and the count, both as uint8_t. For MASTER_VALUE, we
+    // send two zeroes, so the MSP client can assume there
+    pub profile_id: u8,
+    pub profile_count: u8,
+
+    // if setting uses enum values, it will be written here
+    // pub enum_names: [String; ?] // TODO: packed_struct should support null terminated string parsing
+    // pub value: [u8; ?]
 }
 
 #[test]

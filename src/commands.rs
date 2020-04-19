@@ -162,8 +162,14 @@ pub enum MspCommandCode {
     MSP_SENSOR_CONFIG =              96,
     MSP_SET_SENSOR_CONFIG =          97,
 
+    MSP2_COMMON_SETTING =            0x1003,  //in/out message    Returns the value for a setting
+    MSP2_COMMON_SET_SETTING =        0x1004,  //in message        Sets the value for a setting
+
     MSP2_MOTOR_MIXER =               0x1005,
     MSP2_SET_MOTOR_MIXER =           0x1006,
+
+    MSP2_COMMON_SETTING_INFO =       0x1007,
+    MSP2_COMMON_PG_LIST =            0x1008,
 
     MSP2_SERIAL_CONFIG =             0x1009,
     MSP2_SET_SERIAL_CONFIG =         0x100A,
