@@ -605,7 +605,7 @@ pub struct MspSettingInfo {
 
     // Type, section and mode
     #[packed_field(size_bits="8", ty="enum")]
-    pub section_type: SettingType,
+    pub setting_type: SettingType,
     pub setting_section: u8,
     #[packed_field(size_bits="8", ty="enum")]
     pub setting_mode: SettingMode,
