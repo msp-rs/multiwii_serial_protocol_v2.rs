@@ -529,17 +529,42 @@ pub struct OsdSettings {
     pub osd_support: u8,
     pub config: OsdConfig,
     pub item_positions: Vec<OsdItemPosition>,
+#[derive(PrimitiveEnum, Serialize, Deserialize, Debug, Copy, Clone, PartialEq)]
+pub enum Baudrate {
+    BaudAuto = 0,
+    Baud1200 = 1,
+    Baud2400 = 2,
+    Baud4800 = 3,
+    Baud9600 = 4,
+    Baud19200 = 5,
+    Baud38400 = 6,
+    Baud57600 = 7,
+    Baud115200 = 8,
+    Baud230400 = 9,
+    Baud250000 = 10,
+    Baud460800 = 11,
+    Baud921600 = 12,
+    Baud1000000 = 13,
+    Baud1500000 = 14,
+    Baud2000000 = 15,
+    Baud2470000 = 16
+}
 }
 
 #[derive(PackedStruct, Debug, Copy, Clone)]
 #[packed_struct(endian = "lsb", bit_numbering = "msb0")]
-pub struct SerialSetting {
-    pub index: u8,
+pub struct MspSerialSetting {
+    // #[packed_field(size_bits="8", ty="enum")]
+    pub identifier: u8,
     pub function_mask: u32,
-    pub msp_baudrate_index: u8,
-    pub gps_baudrate_index: u8,
-    pub telemetry_baudrate_index: u8,
-    pub peripheral_baudrate_index: u8,
+    #[packed_field(size_bits="8", ty="enum")]
+    pub msp_baudrate_index: Baudrate,
+    #[packed_field(size_bits="8", ty="enum")]
+    pub gps_baudrate_index: Baudrate,
+    #[packed_field(size_bits="8", ty="enum")]
+    pub telemetry_baudrate_index: Baudrate,
+    #[packed_field(size_bits="8", ty="enum")]
+    pub peripheral_baudrate_index: Baudrate,
 }
 
 #[derive(PackedStruct, Debug, Copy, Clone)]
