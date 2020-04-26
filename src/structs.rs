@@ -490,7 +490,7 @@ pub struct MspSetMotorMixer {
 
 #[derive(PackedStruct, Debug, Copy, Clone)]
 #[packed_struct(bytes = "13", endian = "lsb", bit_numbering = "msb0")]
-pub struct OsdConfig {
+pub struct MspOsdConfig {
     pub video_system: u8,
     pub units: u8,
     pub rssi_alarm: u8,
@@ -506,12 +506,12 @@ pub struct OsdConfig {
 pub struct MspSetGetOsdConfig {
     pub item_index: u8,
     #[packed_field(size_bytes="13")]
-    pub config: OsdConfig,
+    pub config: MspOsdConfig,
 }
 
 #[derive(PackedStruct, Debug, Copy, Clone)]
 #[packed_struct(bytes = "2", endian = "lsb", bit_numbering = "msb0")]
-pub struct OsdItemPosition {
+pub struct MspOsdItemPosition {
     pub col: u8,
     pub row: u8,
 }
@@ -521,14 +521,16 @@ pub struct OsdItemPosition {
 pub struct MspSetOsdLayout {
     pub item_index: u8,
     #[packed_field(size_bytes="2")]
-    pub item: OsdItemPosition,
+    pub item: MspOsdItemPosition,
 }
 
 #[derive(Debug)]
-pub struct OsdSettings {
+pub struct MspOsdSettings {
     pub osd_support: u8,
-    pub config: OsdConfig,
-    pub item_positions: Vec<OsdItemPosition>,
+    pub config: MspOsdConfig,
+    pub item_positions: Vec<MspOsdItemPosition>,
+}
+
 #[derive(PrimitiveEnum, Serialize, Deserialize, Debug, Copy, Clone, PartialEq)]
 pub enum Baudrate {
     BaudAuto = 0,
@@ -548,7 +550,6 @@ pub enum Baudrate {
     Baud1500000 = 14,
     Baud2000000 = 15,
     Baud2470000 = 16
-}
 }
 
 #[derive(PackedStruct, Debug, Copy, Clone)]
