@@ -585,12 +585,19 @@ pub struct MspSerialSetting {
 }
 
 #[derive(PackedStruct, Debug, Copy, Clone)]
-#[packed_struct(endian = "lsb", bit_numbering = "msb0")]
-pub struct MspServoMixRule {
+#[packed_struct(bytes = "1", endian = "lsb", bit_numbering = "msb0")]
+pub struct MspSetServoMixRule {
     pub index: u8,
+    #[packed_field(size_bytes="8")]
+    pub servo_rule: MspServoMixRule,
+}
+
+#[derive(PackedStruct, Debug, Copy, Clone)]
+#[packed_struct(bytes = "8", endian = "lsb", bit_numbering = "msb0")]
+pub struct MspServoMixRule {
     pub target_channel: u8,
     pub input_source: u8,
-    pub rate: u8,
+    pub rate: u16,
     pub speed: u8,
     pub min: u8,
     pub max: u8,
