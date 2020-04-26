@@ -532,6 +532,22 @@ pub struct MspOsdSettings {
 }
 
 #[derive(PrimitiveEnum, Serialize, Deserialize, Debug, Copy, Clone, PartialEq)]
+pub enum SerialIdentifier {
+    None = 255,
+    USART1 = 0,
+    USART2 = 1,
+    USART3 = 2,
+    USART4 = 3,
+    USART5 = 4,
+    USART6 = 5,
+    USART7 = 6,
+    USART8 = 7,
+    UsbVcp = 20,
+    SoftSerial1 = 30,
+    SoftSerial2 = 31,
+}
+
+#[derive(PrimitiveEnum, Serialize, Deserialize, Debug, Copy, Clone, PartialEq)]
 pub enum Baudrate {
     BaudAuto = 0,
     Baud1200 = 1,
@@ -555,8 +571,8 @@ pub enum Baudrate {
 #[derive(PackedStruct, Debug, Copy, Clone)]
 #[packed_struct(endian = "lsb", bit_numbering = "msb0")]
 pub struct MspSerialSetting {
-    // #[packed_field(size_bits="8", ty="enum")]
-    pub identifier: u8,
+    #[packed_field(size_bits="8", ty="enum")]
+    pub identifier: SerialIdentifier,
     pub function_mask: u32,
     #[packed_field(size_bits="8", ty="enum")]
     pub msp_baudrate_index: Baudrate,
