@@ -7,7 +7,9 @@ A Multiwii Serial Protocol (MSP) implementation for Rust
 
 ## Introduction
 
-An incomplete implementation of the MSP protocol, with some Cleanflight and Betaflight extensions. Allows one to implement a flight controller that can connect to the Cleanflight or Baseflight configurator.
+This is a fork of https://github.com/hashmismatch/multiwii_serial_protocol.rs!
+
+An incomplete implementation of the MSP2 protocol, with some Cleanflight, Betaflight and iNav extensions. Allows one to implement a flight controller that can connect to the Cleanflight or Baseflight configurator.
 
 # Installation
 
@@ -15,13 +17,13 @@ MSP is available on crates.io and can be included in your Cargo enabled project 
 
 ```toml
 [dependencies]
-multiwii_serial_protocol = "0.1.0"
+multiwii_serial_protocol_2 = "0.1.3"
 ```
 
 Then include it in your code like this:
 
 ```rust
-extern crate multiwii_serial_protocol;
+extern crate multiwii_serial_protocol_2;
 ```
 
 License: MIT OR Apache-2.0
