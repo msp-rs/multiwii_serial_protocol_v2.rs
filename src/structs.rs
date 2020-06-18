@@ -431,6 +431,28 @@ pub struct MspServos {
     pub servos: [u16; 8]
 }
 
+#[derive(PackedStruct, Debug, Copy, Clone)]
+#[packed_struct(bytes = "14", endian = "lsb", bit_numbering = "msb0")]
+pub struct MspServoConfig {
+    pub min: u16,
+    pub max: u16,
+    pub middle: u16,
+    pub rate: u8,
+    pub unused1: u8,
+    pub unused2: u8,
+    pub forward_from_channel: u8, // Depracted, set to 255 for backward compatibility
+    pub reverse_input: u32, // Depracted, Input reversing is not required since it can be done on mixer level
+}
+
+#[derive(PackedStruct, Debug, Copy, Clone)]
+#[packed_struct(bytes = "1", endian = "lsb", bit_numbering = "msb0")]
+pub struct MspSetServoConfig {
+    pub index: u8,
+    #[packed_field(size_bytes="14")]
+    pub servo_config: MspServoConfig,
+}
+
+
 #[derive(PackedStruct, Serialize, Deserialize,  Debug, Copy, Clone)]
 #[packed_struct(endian="lsb")]
 pub struct MspMixerConfig {
