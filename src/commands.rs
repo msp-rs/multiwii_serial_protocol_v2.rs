@@ -162,6 +162,7 @@ pub enum MspCommandCode {
     MSP_SENSOR_CONFIG =              96,
     MSP_SET_SENSOR_CONFIG =          97,
 
+    // Inav
     MSP2_COMMON_SETTING =            0x1003,  //in/out message    Returns the value for a setting
     MSP2_COMMON_SET_SETTING =        0x1004,  //in message        Sets the value for a setting
 
@@ -173,4 +174,11 @@ pub enum MspCommandCode {
 
     MSP2_SERIAL_CONFIG =             0x1009,
     MSP2_SET_SERIAL_CONFIG =         0x100A,
+
+    MSP2_INAV_OSD_LAYOUTS =          0x2012,
+    MSP2_INAV_OSD_SET_LAYOUT_ITEM =  0x2013,
+    MSP2_INAV_OSD_ALARMS =           0x2014,
+    MSP2_INAV_OSD_SET_ALARMS =       0x2015,
+    MSP2_INAV_OSD_PREFERENCES =      0x2016,
+    MSP2_INAV_OSD_SET_PREFERENCES =  0x2017,
 }

@@ -524,11 +524,27 @@ pub struct MspSetOsdLayout {
     pub item: MspOsdItemPosition,
 }
 
+// inav msp layout item
+#[derive(PackedStruct, Debug, Copy, Clone)]
+#[packed_struct(bytes = "1", endian = "lsb", bit_numbering = "msb0")]
+pub struct MspSetOsdLayoutItem {
+    pub layout_index: u8,
+    #[packed_field(size_bytes="3")]
+    pub item: MspSetOsdLayout,
+}
+
 #[derive(Debug)]
 pub struct MspOsdSettings {
     pub osd_support: u8,
     pub config: MspOsdConfig,
     pub item_positions: Vec<MspOsdItemPosition>,
+}
+
+#[derive(PackedStruct, Debug, Copy, Clone)]
+#[packed_struct(bytes = "2", endian = "lsb", bit_numbering = "msb0")]
+pub struct MspOsdLayouts {
+    pub layout_count: u8,
+    pub item_count: u8,
 }
 
 #[derive(PrimitiveEnum, Serialize, Deserialize, Debug, Copy, Clone, PartialEq)]
