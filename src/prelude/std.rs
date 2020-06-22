@@ -21,3 +21,4 @@ pub use std::io::Write;
 pub use std::sync::Arc;
 pub use std::str::from_utf8;
 pub use std::ops::Deref;
+pub use std::convert::TryFrom;
