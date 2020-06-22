@@ -585,6 +585,30 @@ pub enum SerialIdentifier {
     SoftSerial2 = 31,
 }
 
+impl TryFrom<u8> for SerialIdentifier {
+    type Error = &'static str;
+
+    fn try_from(value: u8) -> Result<Self, Self::Error> {
+        let serial = match value {
+            255 => SerialIdentifier::None,
+            0 => SerialIdentifier::USART1,
+            1 => SerialIdentifier::USART2,
+            2 => SerialIdentifier::USART3,
+            3 => SerialIdentifier::USART4,
+            4 => SerialIdentifier::USART5,
+            5 => SerialIdentifier::USART6,
+            6 => SerialIdentifier::USART7,
+            7 => SerialIdentifier::USART8,
+            20 => SerialIdentifier::UsbVcp,
+            30 => SerialIdentifier::SoftSerial1,
+            31 => SerialIdentifier::SoftSerial2,
+            _ => return Err("Serial identifier not found"),
+        };
+
+        Ok(serial)
+    }
+}
+
 #[derive(PrimitiveEnum, Serialize, Deserialize, Debug, Copy, Clone, PartialEq)]
 pub enum Baudrate {
     BaudAuto = 0,
@@ -604,6 +628,59 @@ pub enum Baudrate {
     Baud1500000 = 14,
     Baud2000000 = 15,
     Baud2470000 = 16
+}
+
+impl TryFrom<&str> for Baudrate {
+    type Error = &'static str;
+
+    fn try_from(value: &str) -> Result<Self, Self::Error> {
+        let baudrate = match value {
+            "0" => Baudrate::BaudAuto,
+            "1200" => Baudrate::Baud1200,
+            "2400" => Baudrate::Baud2400,
+            "4800" => Baudrate::Baud4800,
+            "9600" => Baudrate::Baud9600,
+            "19200" => Baudrate::Baud19200,
+            "38400" => Baudrate::Baud38400,
+            "57600" => Baudrate::Baud57600,
+            "115200" => Baudrate::Baud115200,
+            "230400" => Baudrate::Baud230400,
+            "250000" => Baudrate::Baud250000,
+            "460800" => Baudrate::Baud460800,
+            "921600" => Baudrate::Baud921600,
+            "1000000" => Baudrate::Baud1000000,
+            "1500000" => Baudrate::Baud1500000,
+            "2000000" => Baudrate::Baud2000000,
+            "2470000" => Baudrate::Baud2470000,
+            _ => return Err("Baudrate identifier not found"),
+        };
+
+        return Ok(baudrate);
+    }
+}
+
+impl From<Baudrate> for String {
+    fn from(value: Baudrate) -> Self {
+        match value {
+            Baudrate::BaudAuto => "0",
+            Baudrate::Baud1200 => "1200",
+            Baudrate::Baud2400 => "2400",
+            Baudrate::Baud4800 => "4800",
+            Baudrate::Baud9600 => "9600",
+            Baudrate::Baud19200 => "19200",
+            Baudrate::Baud38400 => "38400",
+            Baudrate::Baud57600 => "57600",
+            Baudrate::Baud115200 => "115200",
+            Baudrate::Baud230400 => "230400",
+            Baudrate::Baud250000 => "250000",
+            Baudrate::Baud460800 => "460800",
+            Baudrate::Baud921600 => "921600",
+            Baudrate::Baud1000000 => "1000000",
+            Baudrate::Baud1500000 => "1500000",
+            Baudrate::Baud2000000 => "2000000",
+            Baudrate::Baud2470000 => "2470000",
+        }.to_owned()
+    }
 }
 
 #[derive(PackedStruct, Debug, Copy, Clone)]
