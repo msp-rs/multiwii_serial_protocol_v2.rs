@@ -2,7 +2,7 @@
 name = "multiwii_serial_protocol_v2"
 description = "A Multiwii Serial Protocol (MSP) implementation for Rust"
 repository = "https://github.com/amfern/multiwii_serial_protocol.rs"
-version = "0.1.7"
+version = "0.1.8"
 authors = ["Rudi Benkovic <rudi.benkovic@gmail.com>", "Ilya Guterman <amfernusus@gmail.com>"]
 license = "MIT OR Apache-2.0"
 readme = "README.md"

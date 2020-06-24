@@ -17,7 +17,7 @@ MSP is available on crates.io and can be included in your Cargo enabled project 
 
 ```toml
 [dependencies]
-multiwii_serial_protocol_2 = "0.1.3"
+multiwii_serial_protocol_2 = "0.1.8"
 ```
 
 Then include it in your code like this:
