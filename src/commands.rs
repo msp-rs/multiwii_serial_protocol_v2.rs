@@ -60,6 +60,9 @@ pub enum MspCommandCode {
     MSP_OSD_CONFIG =              84, //out message         Get osd settings - baseflight
     MSP_SET_OSD_CONFIG =          85, //in message          Set osd settings - baseflight
 
+    MSP_OSD_CHAR_READ =           86, //out message         Get osd settings - betaflight
+    MSP_OSD_CHAR_WRITE =          87, //in message          Set osd settings - betaflight
+
     MSP_LED_STRIP_MODECOLOR =     127,
     MSP_SET_LED_STRIP_MODECOLOR = 221,
     
