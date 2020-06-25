@@ -720,6 +720,24 @@ pub struct MspServoMixRule {
 }
 
 #[derive(PackedStruct, Debug, Copy, Clone)]
+#[packed_struct(bytes = "1", endian = "lsb", bit_numbering = "msb0")]
+pub struct MspSetServoMixer {
+    pub index: u8,
+    #[packed_field(size_bytes="6")]
+    pub servo_rule: MspServoMixer,
+}
+
+#[derive(PackedStruct, Debug, Copy, Clone)]
+#[packed_struct(bytes = "6", endian = "lsb", bit_numbering = "msb0")]
+pub struct MspServoMixer {
+    pub target_channel: u8,
+    pub input_source: u8,
+    pub rate: u16,
+    pub speed: u8,
+    pub condition_id: u8,
+}
+
+#[derive(PackedStruct, Debug, Copy, Clone)]
 #[packed_struct(endian = "lsb", bit_numbering = "msb0")]
 pub struct MspRxMap {
     pub map: [u8; 4], // MAX_MAPPABLE_RX_INPUTS
