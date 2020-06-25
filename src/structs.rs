@@ -769,12 +769,14 @@ pub enum SettingMode {
 #[derive(PrimitiveEnum, Serialize, Deserialize, Debug, Copy, Clone, PartialEq)]
 pub enum SettingType {
     VarUint8 = 0,
-    VarInt8 = 1,
-    VarUint16 = 2,
-    VarInt16 = 3,
-    VarUint32 = 4,
-    VarFloat = 5,
-    VarString = 6,
+    VarInt8,
+    VarUint16,
+    VarInt16,
+    VarUint32,
+    #[cfg(feature = "suppport_int32_setting_type")]
+    VarInt32,
+    VarFloat,
+    VarString,
 }
 
 #[derive(PackedStruct, Debug, Copy, Clone)]
