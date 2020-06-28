@@ -117,7 +117,7 @@ impl MspParser {
 					'X' => MSPVersion::V2,
 					_=> {
 						self.reset();
-						return Ok(None);
+						return Err(MspPacketParseError::InvalidHeader2);
 					},
 				};
 
@@ -131,7 +131,7 @@ impl MspParser {
 					33 => self.packet_direction = MspPacketDirection::Unsupported, // '!' error
 					_ => {
 						self.reset();
-						return Ok(None);
+						return Err(MspPacketParseError::InvalidDirection);
 					}
 				}
 
