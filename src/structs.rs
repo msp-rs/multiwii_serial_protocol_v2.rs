@@ -437,7 +437,7 @@ pub struct MspServoConfig {
     pub min: u16,
     pub max: u16,
     pub middle: u16,
-    pub rate: u8,
+    pub rate: i8,
     pub unused1: u8,
     pub unused2: u8,
     pub forward_from_channel: u8, // Depracted, set to 255 for backward compatibility
@@ -732,9 +732,9 @@ pub struct MspSetServoMixer {
 pub struct MspServoMixer {
     pub target_channel: u8,
     pub input_source: u8,
-    pub rate: u16,
+    pub rate: i16,
     pub speed: u8,
-    pub condition_id: u8,
+    pub condition_id: i8,
 }
 
 #[derive(PackedStruct, Debug, Copy, Clone)]
