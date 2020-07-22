@@ -103,7 +103,7 @@ impl MspParser {
     pub fn parse(&mut self, input: u8) -> Result<Option<MspPacket>, MspPacketParseError> {
         match self.state {
             MspParserState::Header1 => {
-                if input == ('$' as u8) {
+                if input == b'$' {
                     self.state = MspParserState::Header2;
                 } else {
                     self.reset();
@@ -263,6 +263,12 @@ impl MspParser {
     }
 }
 
+impl Default for ::MspParser {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl MspPacket {
     /// Number of bytes that this packet requires to be packed
     pub fn packet_size_bytes(&self) -> usize {
@@ -282,8 +288,8 @@ impl MspPacket {
             return Err(MspPacketParseError::OutputBufferSizeMismatch);
         }
 
-        output[0] = '$' as u8;
-        output[1] = 'M' as u8;
+        output[0] = b'$';
+        output[1] = b'M';
         output[2] = self.direction.to_byte();
         output[3] = self.data.len() as u8;
         output[4] = self.cmd as u8;
@@ -307,8 +313,8 @@ impl MspPacket {
             return Err(MspPacketParseError::OutputBufferSizeMismatch);
         }
 
-        output[0] = '$' as u8;
-        output[1] = 'X' as u8;
+        output[0] = b'$';
+        output[1] = b'X';
         output[2] = self.direction.to_byte();
         output[3] = 0;
         output[4..6].copy_from_slice(&self.cmd.to_le_bytes());

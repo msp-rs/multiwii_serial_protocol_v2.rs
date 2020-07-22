@@ -650,7 +650,7 @@ impl TryFrom<&str> for Baudrate {
             _ => return Err("Baudrate identifier not found"),
         };
 
-        return Ok(baudrate);
+        Ok(baudrate)
     }
 }
 
