@@ -70,7 +70,7 @@ enum MSPVersion {
 pub struct MspParser {
     state: MspParserState,
     packet_version: MSPVersion,
-    packet_direction: MspPacketDirection,
+    packet_direction:     MspPacketDirection,
     packet_cmd: u16,
     packet_data_length_remaining: usize,
     packet_data: Vec<u8>,
