@@ -32,5 +32,7 @@ jobs:
         override: true
     - name: Build
       run: cargo build --verbose
+    - name: Lint
+      run: cargo fmt -- --check
     - name: Run tests
       run: cargo test --verbose
