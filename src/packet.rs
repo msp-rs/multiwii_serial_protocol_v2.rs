@@ -333,7 +333,7 @@ fn test_serialize() {
 	let packet = MspPacket {
 		cmd: 2,
 		direction: MspPacketDirection::ToFlightController,
-		data: Cow::Owned(vec![0xbe, 0xef])
+		data: vec![0xbe, 0xef]
 	};
 
 	let size = packet.packet_size_bytes();
@@ -384,7 +384,7 @@ fn test_roundtrip() {
 		let packet = MspPacket {
 			cmd: 1,
 			direction: MspPacketDirection::ToFlightController,
-			data: Cow::Owned(vec![0x00, 0x00, 0x00])
+			data: vec![0x00, 0x00, 0x00]
 		};
 		roundtrip(&packet);
 	}
@@ -393,7 +393,7 @@ fn test_roundtrip() {
 		let packet = MspPacket {
 			cmd: 200,
 			direction: MspPacketDirection::FromFlightController,
-			data: Cow::Owned(vec![])
+			data: vec![]
 		};
 		roundtrip(&packet);
 	}
@@ -402,7 +402,7 @@ fn test_roundtrip() {
 		let packet = MspPacket {
 			cmd: 100,
 			direction: MspPacketDirection::Unsupported,
-			data: Cow::Owned(vec![0x44, 0x20, 0x00, 0x80])
+			data: vec![0x44, 0x20, 0x00, 0x80]
 		};
 		roundtrip(&packet);
 	}
