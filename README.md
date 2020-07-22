@@ -1,9 +1,8 @@
 A Multiwii Serial Protocol (MSP) implementation for Rust
 ===========================================
 
-[![Build Status](https://travis-ci.org/hashmismatch/multiwii_serial_protocol.rs.svg?branch=master)](https://travis-ci.org/hashmismatch/multiwii_serial_protocol.rs)
-
-[![Documentation](https://docs.rs/multiwii_serial_protocol/badge.svg)](https://docs.rs/multiwii_serial_protocol)
+[![Build Status](https://github.com/msp-rs/multiwii_serial_protocol_v2.rs/workflows/Rust/badge.svg)](https://github.com/msp-rs/multiwii_serial_protocol_v2.rs/actions)
+[![Documentation](https://docs.rs/multiwii_serial_protocol_v2/badge.svg)](https://docs.rs/multiwii_serial_protocol_v2)
 
 ## Introduction
 
