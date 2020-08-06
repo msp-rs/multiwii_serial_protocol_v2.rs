@@ -13,6 +13,7 @@ pub use std::io::Write;
 pub use std::iter;
 pub use std::marker::PhantomData;
 pub use std::mem;
+pub use std::mem::size_of;
 pub use std::num::Wrapping;
 pub use std::ops::Deref;
 pub use std::ops::Range;
