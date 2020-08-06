@@ -151,7 +151,7 @@ impl MspParser {
                 self.packet_data.push(input);
 
                 if self.packet_data.len() == 2 {
-                    let mut s = [0; 2];
+                    let mut s = [0u8; size_of::<u16>()];
                     s.copy_from_slice(&self.packet_data);
                     self.packet_cmd = u16::from_le_bytes(s);
 
@@ -165,9 +165,9 @@ impl MspParser {
                 self.packet_data.push(input);
 
                 if self.packet_data.len() == 2 {
-                    let mut s = [0; 8];
-                    s[0..2].copy_from_slice(&self.packet_data);
-                    self.packet_data_length_remaining = usize::from_le_bytes(s);
+                    let mut s = [0u8; size_of::<u16>()];
+                    s.copy_from_slice(&self.packet_data);
+                    self.packet_data_length_remaining = u16::from_le_bytes(s).into();
                     self.packet_crc_v2.digest(&self.packet_data);
                     self.packet_data =
                         Vec::with_capacity(self.packet_data_length_remaining as usize);
