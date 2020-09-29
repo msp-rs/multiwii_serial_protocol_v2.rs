@@ -1,7 +1,9 @@
 pub use std::borrow::Cow;
 pub use std::cell::RefCell;
 pub use std::cmp::{max, min};
+pub use std::convert::Into;
 pub use std::convert::TryFrom;
+pub use std::convert::TryInto;
 pub use std::fmt;
 pub use std::fmt::format as format_to_string;
 pub use std::fmt::Error as FmtError;

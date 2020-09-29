@@ -1,5 +1,7 @@
 pub use core::cell::RefCell;
 pub use core::cmp::*;
+pub use core::convert::Into;
+pub use core::convert::TryInto;
 pub use core::fmt;
 pub use core::fmt::Debug;
 pub use core::fmt::Error as FmtError;

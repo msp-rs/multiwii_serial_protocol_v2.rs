@@ -1,27 +1,27 @@
 //! MSP structures
 
-use prelude::v1::*;
+use crate::prelude::v1::*;
 
-#[derive(PackedStruct, Serialize, Deserialize, Debug, Copy, Clone)]
+#[derive(PackedStruct, Serialize, Deserialize, Debug, Copy, Clone, PartialEq)]
 pub struct MspApiVersion {
     pub protocol_version: u8,
     pub api_version_major: u8,
     pub api_version_minor: u8,
 }
 
-#[derive(PackedStruct, Serialize, Deserialize, Debug, Copy, Clone)]
+#[derive(PackedStruct, Serialize, Deserialize, Debug, Copy, Clone, PartialEq)]
 pub struct MspFlightControllerVariant {
     pub identifier: [u8; 4],
 }
 
-#[derive(PackedStruct, Serialize, Deserialize, Debug, Copy, Clone)]
+#[derive(PackedStruct, Serialize, Deserialize, Debug, Copy, Clone, PartialEq)]
 pub struct MspFlightControllerVersion {
     pub major: u8,
     pub minor: u8,
     pub patch: u8,
 }
 
-#[derive(PackedStruct, Serialize, Deserialize, Debug, Copy, Clone)]
+#[derive(PackedStruct, Serialize, Deserialize, Debug, Copy, Clone, PartialEq)]
 #[packed_struct(endian = "lsb")]
 pub struct MspBoardInfo {
     pub board_id: [u8; 4],
@@ -29,19 +29,19 @@ pub struct MspBoardInfo {
     pub fc_type: u8,
 }
 
-#[derive(PackedStruct, Serialize, Deserialize, Debug, Copy, Clone)]
+#[derive(PackedStruct, Serialize, Deserialize, Debug, Copy, Clone, PartialEq)]
 pub struct MspBuildInfo {
     pub date_str: [u8; 11],
     pub time_str: [u8; 8],
     pub git_str: [u8; 7],
 }
 
-#[derive(PackedStruct, Serialize, Deserialize, Debug, Copy, Clone)]
+#[derive(PackedStruct, Serialize, Deserialize, Debug, Copy, Clone, PartialEq)]
 pub struct MspUniqueId {
     pub uid: [u8; 12],
 }
 
-#[derive(PackedStruct, Serialize, Deserialize, Debug, Copy, Clone)]
+#[derive(PackedStruct, Serialize, Deserialize, Debug, Copy, Clone, PartialEq)]
 #[packed_struct(bytes = "1", endian = "lsb", bit_numbering = "msb0")]
 pub struct MspAvailableSensors {
     #[packed_field(bits = "2")]
@@ -56,7 +56,7 @@ pub struct MspAvailableSensors {
     pub acc: bool,
 }
 
-#[derive(PackedStruct, Serialize, Deserialize, Debug, Copy, Clone)]
+#[derive(PackedStruct, Serialize, Deserialize, Debug, Copy, Clone, PartialEq)]
 #[packed_struct(endian = "lsb")]
 pub struct MspStatus {
     pub cycle_time: u16,
@@ -69,7 +69,7 @@ pub struct MspStatus {
     pub system_load: u16,
 }
 
-#[derive(PackedStruct, Serialize, Deserialize, Debug, Copy, Clone)]
+#[derive(PackedStruct, Serialize, Deserialize, Debug, Copy, Clone, PartialEq)]
 #[packed_struct(endian = "lsb")]
 pub struct MspStatusEx {
     pub cycle_time: u16,
@@ -97,7 +97,7 @@ pub struct MspBfConfig {
     pub current_offset: i16,
 }
 
-#[derive(PackedStruct, Serialize, Deserialize, Debug, Copy, Clone)]
+#[derive(PackedStruct, Serialize, Deserialize, Debug, Copy, Clone, PartialEq)]
 #[packed_struct(endian = "lsb")]
 pub struct MspRawImu {
     pub acc_x: i16,
@@ -111,7 +111,7 @@ pub struct MspRawImu {
     pub mag_z: i16,
 }
 
-#[derive(PackedStruct, Serialize, Deserialize, Debug, Copy, Clone)]
+#[derive(PackedStruct, Serialize, Deserialize, Debug, Copy, Clone, PartialEq)]
 #[packed_struct(bytes = "1", endian = "lsb", bit_numbering = "msb0")]
 pub struct MspDataFlashSummaryReply {
     #[packed_field(bits = "6")]
@@ -123,28 +123,28 @@ pub struct MspDataFlashSummaryReply {
     pub used_size_bytes: u32,
 }
 
-#[derive(PackedStruct, Serialize, Deserialize, Debug, Copy, Clone)]
+#[derive(PackedStruct, Serialize, Deserialize, Debug, Copy, Clone, PartialEq)]
 #[packed_struct(bytes = "1", endian = "lsb", bit_numbering = "msb0")]
 pub struct MspDataFlashReply {
     pub read_address: u32,
     // pub payload: Vec<u8>, // TODO: packed_struct should support dynamic size too the end
 }
 
-#[derive(PackedStruct, Debug, Copy, Clone)]
+#[derive(PackedStruct, Debug, Copy, Clone, PartialEq)]
 #[packed_struct(bytes = "6", endian = "lsb", bit_numbering = "msb0")]
 pub struct MspDataFlashRead {
     pub read_address: u32,
     pub read_length: u16,
 }
 
-#[derive(PackedStruct, Serialize, Deserialize, Debug, Copy, Clone)]
+#[derive(PackedStruct, Serialize, Deserialize, Debug, Copy, Clone, PartialEq)]
 #[packed_struct(endian = "lsb")]
 pub struct MspAccTrim {
     pub pitch: u16,
     pub roll: u16,
 }
 
-#[derive(PackedStruct, Serialize, Deserialize, Debug, Copy, Clone)]
+#[derive(PackedStruct, Serialize, Deserialize, Debug, Copy, Clone, PartialEq)]
 #[packed_struct(endian = "lsb")]
 pub struct MspIdent {
     pub version: u8,
@@ -153,7 +153,7 @@ pub struct MspIdent {
     pub capability: u32,
 }
 
-#[derive(PackedStruct, Serialize, Deserialize, Debug, Copy, Clone)]
+#[derive(PackedStruct, Serialize, Deserialize, Debug, Copy, Clone, PartialEq)]
 #[packed_struct(endian = "lsb")]
 pub struct MspMisc {
     pub rx_mid_rc: u16,
@@ -173,7 +173,7 @@ pub struct MspMisc {
     pub compass_mag_declination: u16,
 }
 
-#[derive(PackedStruct, Serialize, Deserialize, Debug, Copy, Clone)]
+#[derive(PackedStruct, Serialize, Deserialize, Debug, Copy, Clone, PartialEq)]
 #[packed_struct(endian = "lsb")]
 pub struct MspAttitude {
     pub roll: i16,
@@ -181,7 +181,7 @@ pub struct MspAttitude {
     pub yaw: i16,
 }
 
-#[derive(PackedStruct, Serialize, Deserialize, Debug, Copy, Clone)]
+#[derive(PackedStruct, Serialize, Deserialize, Debug, Copy, Clone, PartialEq)]
 #[packed_struct(endian = "lsb")]
 pub struct MspAltitude {
     /// [centimeters]
@@ -190,7 +190,7 @@ pub struct MspAltitude {
     pub vario: i16,
 }
 
-#[derive(PackedStruct, Serialize, Deserialize, Debug, Copy, Clone)]
+#[derive(PackedStruct, Serialize, Deserialize, Debug, Copy, Clone, PartialEq)]
 #[packed_struct(endian = "lsb")]
 pub struct MspBatteryConfig {
     pub vbat_min_cell_voltage: u8,
@@ -201,7 +201,7 @@ pub struct MspBatteryConfig {
     pub current_meter_source: u8,
 }
 
-#[derive(PackedStruct, Serialize, Deserialize, Debug, Copy, Clone)]
+#[derive(PackedStruct, Serialize, Deserialize, Debug, Copy, Clone, PartialEq)]
 #[packed_struct(endian = "lsb")]
 pub struct MspAnalog {
     pub battery_voltage: u8,
@@ -211,19 +211,19 @@ pub struct MspAnalog {
     pub amperage: i16,
 }
 
-#[derive(PackedStruct, Serialize, Deserialize, Debug, Copy, Clone)]
+#[derive(PackedStruct, Serialize, Deserialize, Debug, Copy, Clone, PartialEq)]
 #[packed_struct(endian = "lsb")]
 pub struct MspRssiConfig {
     pub rssi_channel: u8,
 }
 
-#[derive(PackedStruct, Serialize, Deserialize, Debug, Copy, Clone)]
+#[derive(PackedStruct, Serialize, Deserialize, Debug, Copy, Clone, PartialEq)]
 pub struct MspVoltageMeter {
     pub id: u8,
     pub value: u8,
 }
 
-#[derive(PackedStruct, Serialize, Deserialize, Debug, Copy, Clone)]
+#[derive(PackedStruct, Serialize, Deserialize, Debug, Copy, Clone, PartialEq)]
 #[packed_struct(endian = "lsb")]
 pub struct MspCurrentMeter {
     pub id: u8,
@@ -232,7 +232,7 @@ pub struct MspCurrentMeter {
     pub amperage: u16,
 }
 
-#[derive(PackedStruct, Serialize, Deserialize, Debug, Copy, Clone)]
+#[derive(PackedStruct, Serialize, Deserialize, Debug, Copy, Clone, PartialEq)]
 #[packed_struct(endian = "lsb")]
 pub struct MspBatteryState {
     pub battery_cell_count: u8,
@@ -317,7 +317,7 @@ pub enum MspRcChannel {
     Aux16 = 19,
 }
 
-#[derive(PackedStruct, Serialize, Deserialize, Debug, Copy, Clone)]
+#[derive(PackedStruct, Serialize, Deserialize, Debug, Copy, Clone, PartialEq)]
 pub struct MspRcMappedChannel {
     #[packed_field(size_bits = "8", ty = "enum")]
     pub channel: MspRcChannel,
@@ -427,7 +427,7 @@ pub struct MspServos {
     pub servos: [u16; 8],
 }
 
-#[derive(PackedStruct, Debug, Copy, Clone)]
+#[derive(PackedStruct, Debug, Copy, Clone, PartialEq)]
 #[packed_struct(bytes = "14", endian = "lsb", bit_numbering = "msb0")]
 pub struct MspServoConfig {
     pub min: u16,
@@ -440,7 +440,7 @@ pub struct MspServoConfig {
     pub reverse_input: u32, // Depracted, Input reversing is not required since it can be done on mixer level
 }
 
-#[derive(PackedStruct, Debug, Copy, Clone)]
+#[derive(PackedStruct, Debug, Copy, Clone, PartialEq)]
 #[packed_struct(bytes = "1", endian = "lsb", bit_numbering = "msb0")]
 pub struct MspSetServoConfig {
     pub index: u8,
@@ -448,14 +448,14 @@ pub struct MspSetServoConfig {
     pub servo_config: MspServoConfig,
 }
 
-#[derive(PackedStruct, Serialize, Deserialize, Debug, Copy, Clone)]
+#[derive(PackedStruct, Serialize, Deserialize, Debug, Copy, Clone, PartialEq)]
 #[packed_struct(endian = "lsb")]
 pub struct MspMixerConfig {
     #[packed_field(size_bits = "8", ty = "enum")]
     pub mixer_mode: MixerMode,
 }
 
-#[derive(PackedStruct, Debug, Copy, Clone)]
+#[derive(PackedStruct, Debug, Copy, Clone, PartialEq)]
 #[packed_struct(bytes = "4", endian = "lsb", bit_numbering = "msb0")]
 pub struct MspModeRange {
     pub box_id: u8,
@@ -465,7 +465,7 @@ pub struct MspModeRange {
     pub end_step: u8,
 }
 
-#[derive(PackedStruct, Debug, Copy, Clone)]
+#[derive(PackedStruct, Debug, Copy, Clone, PartialEq)]
 #[packed_struct(bytes = "5", endian = "lsb", bit_numbering = "msb0")]
 pub struct MspSetModeRange {
     pub index: u8,
@@ -488,7 +488,7 @@ pub enum MixerMode {
     OctoX8 = 11,
 }
 
-#[derive(PackedStruct, Debug, Copy, Clone)]
+#[derive(PackedStruct, Debug, Copy, Clone, PartialEq)]
 #[packed_struct(bytes = "8", endian = "lsb", bit_numbering = "msb0")]
 pub struct MspMotorMixer {
     pub throttle: u16,
@@ -497,7 +497,7 @@ pub struct MspMotorMixer {
     pub yaw: u16,
 }
 
-#[derive(PackedStruct, Debug, Copy, Clone)]
+#[derive(PackedStruct, Debug, Copy, Clone, PartialEq)]
 #[packed_struct(bytes = "9", endian = "lsb", bit_numbering = "msb0")]
 pub struct MspSetMotorMixer {
     pub index: u8,
@@ -505,7 +505,7 @@ pub struct MspSetMotorMixer {
     pub motor_mixer: MspMotorMixer,
 }
 
-#[derive(PackedStruct, Debug, Copy, Clone)]
+#[derive(PackedStruct, Debug, Copy, Clone, PartialEq)]
 #[packed_struct(bytes = "13", endian = "lsb", bit_numbering = "msb0")]
 pub struct MspOsdConfig {
     pub video_system: u8,
@@ -518,7 +518,7 @@ pub struct MspOsdConfig {
     pub neg_alt_alarm: u16,
 }
 
-#[derive(PackedStruct, Debug, Copy, Clone)]
+#[derive(PackedStruct, Debug, Copy, Clone, PartialEq)]
 #[packed_struct(bytes = "1", endian = "lsb", bit_numbering = "msb0")]
 pub struct MspSetGetOsdConfig {
     pub item_index: u8,
@@ -526,14 +526,14 @@ pub struct MspSetGetOsdConfig {
     pub config: MspOsdConfig,
 }
 
-#[derive(PackedStruct, Debug, Copy, Clone)]
+#[derive(PackedStruct, Debug, Copy, Clone, PartialEq)]
 #[packed_struct(bytes = "2", endian = "lsb", bit_numbering = "msb0")]
 pub struct MspOsdItemPosition {
     pub col: u8,
     pub row: u8,
 }
 
-#[derive(PackedStruct, Debug, Copy, Clone)]
+#[derive(PackedStruct, Debug, Copy, Clone, PartialEq)]
 #[packed_struct(bytes = "1", endian = "lsb", bit_numbering = "msb0")]
 pub struct MspSetOsdLayout {
     pub item_index: u8,
@@ -542,7 +542,7 @@ pub struct MspSetOsdLayout {
 }
 
 // inav msp layout item
-#[derive(PackedStruct, Debug, Copy, Clone)]
+#[derive(PackedStruct, Debug, Copy, Clone, PartialEq)]
 #[packed_struct(bytes = "1", endian = "lsb", bit_numbering = "msb0")]
 pub struct MspSetOsdLayoutItem {
     pub layout_index: u8,
@@ -557,7 +557,7 @@ pub struct MspOsdSettings {
     pub item_positions: Vec<MspOsdItemPosition>,
 }
 
-#[derive(PackedStruct, Debug, Copy, Clone)]
+#[derive(PackedStruct, Debug, Copy, Clone, PartialEq)]
 #[packed_struct(bytes = "2", endian = "lsb", bit_numbering = "msb0")]
 pub struct MspOsdLayouts {
     pub layout_count: u8,
@@ -679,7 +679,7 @@ impl From<Baudrate> for String {
     }
 }
 
-#[derive(PackedStruct, Debug, Copy, Clone)]
+#[derive(PackedStruct, Debug, Copy, Clone, PartialEq)]
 #[packed_struct(endian = "lsb", bit_numbering = "msb0")]
 pub struct MspSerialSetting {
     #[packed_field(size_bits = "8", ty = "enum")]
@@ -695,7 +695,7 @@ pub struct MspSerialSetting {
     pub peripheral_baudrate_index: Baudrate,
 }
 
-#[derive(PackedStruct, Debug, Copy, Clone)]
+#[derive(PackedStruct, Debug, Copy, Clone, PartialEq)]
 #[packed_struct(bytes = "1", endian = "lsb", bit_numbering = "msb0")]
 pub struct MspSetServoMixRule {
     pub index: u8,
@@ -703,7 +703,7 @@ pub struct MspSetServoMixRule {
     pub servo_rule: MspServoMixRule,
 }
 
-#[derive(PackedStruct, Debug, Copy, Clone)]
+#[derive(PackedStruct, Debug, Copy, Clone, PartialEq)]
 #[packed_struct(bytes = "8", endian = "lsb", bit_numbering = "msb0")]
 pub struct MspServoMixRule {
     pub target_channel: u8,
@@ -715,7 +715,7 @@ pub struct MspServoMixRule {
     pub box_id: u8,
 }
 
-#[derive(PackedStruct, Debug, Copy, Clone)]
+#[derive(PackedStruct, Debug, Copy, Clone, PartialEq)]
 #[packed_struct(bytes = "1", endian = "lsb", bit_numbering = "msb0")]
 pub struct MspSetServoMixer {
     pub index: u8,
@@ -723,7 +723,7 @@ pub struct MspSetServoMixer {
     pub servo_rule: MspServoMixer,
 }
 
-#[derive(PackedStruct, Debug, Copy, Clone)]
+#[derive(PackedStruct, Debug, Copy, Clone, PartialEq)]
 #[packed_struct(bytes = "6", endian = "lsb", bit_numbering = "msb0")]
 pub struct MspServoMixer {
     pub target_channel: u8,
@@ -733,13 +733,13 @@ pub struct MspServoMixer {
     pub condition_id: i8,
 }
 
-#[derive(PackedStruct, Debug, Copy, Clone)]
+#[derive(PackedStruct, Debug, Copy, Clone, PartialEq)]
 #[packed_struct(endian = "lsb", bit_numbering = "msb0")]
 pub struct MspRxMap {
     pub map: [u8; 4], // MAX_MAPPABLE_RX_INPUTS
 }
 
-#[derive(PackedStruct, Debug, Copy, Clone)]
+#[derive(PackedStruct, Debug, Copy, Clone, PartialEq)]
 #[packed_struct(endian = "lsb", bit_numbering = "msb0")]
 pub struct MspSettingGroup {
     pub group_id: u16,
@@ -747,7 +747,7 @@ pub struct MspSettingGroup {
     pub end_id: u16,
 }
 
-#[derive(PackedStruct, Debug, Copy, Clone)]
+#[derive(PackedStruct, Debug, Copy, Clone, PartialEq)]
 #[packed_struct(endian = "lsb", bit_numbering = "msb0")]
 pub struct MspSettingInfoRequest {
     pub null: u8,
@@ -773,7 +773,7 @@ pub enum SettingType {
     VarString,
 }
 
-#[derive(PackedStruct, Debug, Copy, Clone)]
+#[derive(PackedStruct, Debug, Copy, Clone, PartialEq)]
 #[packed_struct(bytes = "15", endian = "lsb", bit_numbering = "msb0")]
 pub struct MspSettingInfo {
     // pub name: [u8; ?], null terminated strings

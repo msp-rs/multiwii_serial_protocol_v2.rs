@@ -27,5 +27,8 @@ mod commands;
 mod packet;
 pub mod structs;
 
+#[cfg(feature = "async")]
+pub mod async_adapter;
+
 pub use commands::*;
 pub use packet::*;
