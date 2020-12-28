@@ -1,4 +1,4 @@
-use std::any::{Any,TypeId};
+use std::any::{Any, TypeId};
 use std::collections::VecDeque;
 use std::io;
 use std::io::{Read, Write};
@@ -36,7 +36,7 @@ ttl: Duration,
 */}
 
 struct Request {
-    packet: (TypeId,Vec<u8>),
+    packet: (TypeId, Vec<u8>),
     backchannel: UnboundedSender<Box<dyn Any>>,
     t0: Instant,
 }
@@ -49,7 +49,7 @@ pub enum MspVersion {
 /*
 impl AsyncMspConnection {
     pub fn new<R,W> ( reader: R, writer: W, msp_version: MspVersion) -> (Self, impl Future<Output =
-                                                                         impl Send> + Send) 
+                                                                         impl Send> + Send)
 
 where
         R: AsyncRead + std::marker::Unpin,

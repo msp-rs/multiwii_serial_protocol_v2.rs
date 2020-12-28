@@ -31,7 +31,7 @@ macro_rules! enum_with_associated_type {
 
         impl TryFrom<MspPayloadEnum> for pascal!($name)  {
             type Error = MspError;
-            
+
             fn try_from(packet: MspPayloadEnum) -> Result<pascal!($name), MspError> {
                  match packet {
                     MspPayloadEnum::$name(p)=> Ok(p),
