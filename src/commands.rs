@@ -1,14 +1,54 @@
-#[derive(PrimitiveEnum, Debug, Copy, Clone, PartialEq)]
-#[allow(non_camel_case_types)]
+macro_rules! enum_with_associated_type {
+    ($($name:tt = $id:expr),+ $(,)?) =>{
+        use crate::prelude::v1::*;
+        use casey::pascal; //{lower, pascal, shouty, snake, upper};
+        use crate::structs::*;
+        use crate::MspError;
 
-/// MSP command values, used for command encapsulation
-pub enum MspCommandCode {
+        /// MSP command values, used for command encapsulation
+        //#[derive(PrimitiveEnum, Debug, Copy, Clone, PartialEq)]
+        #[allow(non_camel_case_types)]
+        pub enum MspPayloadEnum {
+            $( $name( pascal!($name) ), )+
+        }
+
+        impl MspPayloadEnum {
+            pub fn cmd(&self)-> isize {
+                match self {
+                    $(
+                    Self::$name(_) => $id,
+                    )+
+                }
+            }
+        }
+
+        $(
+        impl From<pascal!($name)> for MspPayloadEnum {
+             fn from(packet: pascal!($name)) -> Self {
+                 Self::$name(packet)
+             }
+        }
+
+        impl TryFrom<MspPayloadEnum> for pascal!($name)  {
+            type Error = MspError;
+            
+            fn try_from(packet: MspPayloadEnum) -> Result<pascal!($name), MspError> {
+                 match packet {
+                    MspPayloadEnum::$name(p)=> Ok(p),
+                    _=> Err(MspError::WrongMessage)
+                 }
+             }
+        }
+        )+
+    }
+}
+
+enum_with_associated_type! {
     MSP_API_VERSION = 1,
     MSP_FC_VARIANT = 2,
     MSP_FC_VERSION = 3,
     MSP_BOARD_INFO = 4,
     MSP_BUILD_INFO = 5,
-
     // MSP commands for Cleanflight original features
     MSP_BATTERY_CONFIG = 32,
     MSP_SET_BATTERY_CONFIG = 33,
@@ -16,8 +56,9 @@ pub enum MspCommandCode {
     MSP_SET_MODE_RANGE = 35,
     MSP_FEATURE = 36,
     MSP_SET_FEATURE = 37,
-    MSP_BOARD_ALIGNMENT = 38,
-    MSP_SET_BOARD_ALIGNMENT = 39,
+
+    //MSP_BOARD_ALIGNMENT = 38,
+    //MSP_SET_BOARD_ALIGNMENT = 39,
     MSP_AMPERAGE_METER_CONFIG = 40,
     MSP_SET_AMPERAGE_METER_CONFIG = 41,
     MSP_MIXER = 42,
@@ -183,5 +224,6 @@ pub enum MspCommandCode {
     MSP2_INAV_OSD_SET_PREFERENCES = 0x2017,
 
     MSP2_INAV_SERVO_MIXER = 0x2020,
-    MSP2_INAV_SET_SERVO_MIXER = 0x2021,
+    MSP2_INAV_SET_SERVO_MIXER = 0x2021
+        */
 }

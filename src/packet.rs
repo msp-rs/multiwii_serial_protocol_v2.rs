@@ -9,6 +9,7 @@ pub enum MspError {
     CrcMismatch { expected: u8, calculated: u8 },
     OutputBufferSizeMismatch,
     Packing(PackingError),
+    WrongMessage,
 }
 
 /// Request: Master to Slave (`<`)
@@ -34,10 +35,10 @@ impl From<MspPacketDirection> for u8 {
 impl TryFrom<u8> for MspPacketDirection {
     type Error = MspError;
     fn try_from(byte: u8) -> Result<Self, <Self as TryFrom<u8>>::Error> {
-        match byte as char {
-            '<' => Ok(MspPacketDirection::Request),
-            '>' => Ok(MspPacketDirection::Response),
-            '!' => Ok(MspPacketDirection::Error),
+        match byte {
+            b'<' => Ok(MspPacketDirection::Request),
+            b'>' => Ok(MspPacketDirection::Response),
+            b'!' => Ok(MspPacketDirection::Error),
             _ => Err(MspError::UnknownDirection(byte)),
         }
     }
@@ -63,9 +64,9 @@ impl From<&MspVersion> for u8 {
 impl TryFrom<u8> for MspVersion {
     type Error = MspError;
     fn try_from(byte: u8) -> Result<Self, <Self as TryFrom<u8>>::Error> {
-        match byte as char {
-            'M' => Ok(MspVersion::V1),
-            'X' => Ok(MspVersion::V2),
+        match byte {
+            b'M' => Ok(MspVersion::V1),
+            b'X' => Ok(MspVersion::V2),
             _ => Err(MspError::UnknownVersion(byte)),
         }
     }
@@ -75,6 +76,7 @@ pub trait MspPayload: Sized + PartialEq {
     // We can not implement this yet, because we do not know which message maps to which ID
     //const ID: IdType;
     fn len(&self) -> usize;
+    fn cmd(&self) -> u16;
     fn decode(r: &[u8]) -> Result<Self, MspError>
     where
         Self: std::marker::Sized;

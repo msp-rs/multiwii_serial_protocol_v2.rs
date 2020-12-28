@@ -10,12 +10,12 @@ pub struct MspApiVersion {
 }
 
 #[derive(PackedStruct, Serialize, Deserialize, Debug, Copy, Clone, PartialEq)]
-pub struct MspFlightControllerVariant {
+pub struct MspFcVariant {
     pub identifier: [u8; 4],
 }
 
 #[derive(PackedStruct, Serialize, Deserialize, Debug, Copy, Clone, PartialEq)]
-pub struct MspFlightControllerVersion {
+pub struct MspFcVersion {
     pub major: u8,
     pub minor: u8,
     pub patch: u8,
@@ -203,6 +203,17 @@ pub struct MspBatteryConfig {
 
 #[derive(PackedStruct, Serialize, Deserialize, Debug, Copy, Clone, PartialEq)]
 #[packed_struct(endian = "lsb")]
+pub struct MspSetBatteryConfig {
+    pub vbat_min_cell_voltage: u8,
+    pub vbat_max_cell_voltage: u8,
+    pub vbat_warning_cell_voltage: u8,
+    pub battery_capacity: u16,
+    pub voltage_meter_source: u8,
+    pub current_meter_source: u8,
+}
+
+#[derive(PackedStruct, Serialize, Deserialize, Debug, Copy, Clone, PartialEq)]
+#[packed_struct(endian = "lsb")]
 pub struct MspAnalog {
     pub battery_voltage: u8,
     pub mah_drawn: u16,
@@ -324,7 +335,12 @@ pub struct MspRcMappedChannel {
 }
 
 #[derive(PackedStruct, Serialize, Deserialize, Debug, Copy, Clone, Default)]
-pub struct MspFeatures {
+pub struct MspFeature {
+    pub features: [bool; 32],
+}
+
+#[derive(PackedStruct, Serialize, Deserialize, Debug, Copy, Clone, Default)]
+pub struct MspSetFeature {
     pub features: [bool; 32],
 }
 
@@ -421,6 +437,8 @@ pub struct MspSensorConfig {
     pub mag_hardware: u8,
 }
 
+pub type MspSetSensorConfig = MspSensorConfig;
+
 #[derive(PackedStruct, Serialize, Deserialize, Debug, Copy, Clone, Default)]
 #[packed_struct(endian = "lsb")]
 pub struct MspServos {
@@ -466,7 +484,15 @@ pub struct MspModeRange {
 }
 
 #[derive(PackedStruct, Debug, Copy, Clone, PartialEq)]
-#[packed_struct(bytes = "5", endian = "lsb", bit_numbering = "msb0")]
+#[packed_struct(bytes = "4", endian = "lsb", bit_numbering = "msb0")]
+pub struct MspModeRanges {
+    pub index: u8,
+    #[packed_field(size_bytes = "4")]
+    pub mode_range: MspModeRange,
+}
+
+#[derive(PackedStruct, Debug, Copy, Clone, PartialEq)]
+#[packed_struct(bytes = "4", endian = "lsb", bit_numbering = "msb0")]
 pub struct MspSetModeRange {
     pub index: u8,
     #[packed_field(size_bytes = "4")]
