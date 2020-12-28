@@ -6,6 +6,7 @@ version = "0.1.12"
 authors = ["Rudi Benkovic <rudi.benkovic@gmail.com>", "Ilya Guterman <amfernusus@gmail.com>"]
 license = "MIT OR Apache-2.0"
 readme = "README.md"
+edition = "2018"
 
 [dependencies]
 packed_struct = "0.4"

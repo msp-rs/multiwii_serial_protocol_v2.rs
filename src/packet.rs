@@ -1,5 +1,5 @@
 use crc_any::CRCu8;
-use prelude::v1::*;
+use crate::prelude::v1::*;
 
 /// Packet parsing error
 #[derive(Copy, Clone, Debug, PartialEq)]
@@ -263,7 +263,7 @@ impl MspParser {
     }
 }
 
-impl Default for ::MspParser {
+impl Default for MspParser {
     fn default() -> Self {
         Self::new()
     }

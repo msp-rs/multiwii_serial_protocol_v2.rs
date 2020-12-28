@@ -21,6 +21,9 @@ extern crate serde_derive;
 
 extern crate serde;
 
+//#[cfg(feature = "async")]
+//mod async_stub;
+
 mod prelude;
 
 mod commands;

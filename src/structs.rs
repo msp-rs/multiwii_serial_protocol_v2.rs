@@ -1,6 +1,6 @@
 //! MSP structures
 
-use prelude::v1::*;
+use crate::prelude::v1::*;
 
 #[derive(PackedStruct, Serialize, Deserialize, Debug, Copy, Clone)]
 pub struct MspApiVersion {
