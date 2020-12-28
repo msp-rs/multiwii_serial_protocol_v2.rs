@@ -812,6 +812,6 @@ fn test_mixer() {
         mixer_mode: MixerMode::QuadX,
     };
     assert_eq!(3, m.mixer_mode.to_primitive());
-    let p = m.pack();
+    let p = m.pack().unwrap();
     assert_eq!(&[3], &p);
 }
