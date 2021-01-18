@@ -1,5 +1,5 @@
+use crate::prelude::v1::*;
 use crc_any::CRCu8;
-use prelude::v1::*;
 
 /// Packet parsing error
 #[derive(Copy, Clone, Debug, PartialEq)]
@@ -11,6 +11,7 @@ pub enum MspPacketParseError {
     InvalidHeader2,
     InvalidDirection,
     InvalidDataLength,
+    TimedOut,
 }
 
 /// Packet's desired destination
@@ -263,7 +264,7 @@ impl MspParser {
     }
 }
 
-impl Default for ::MspParser {
+impl Default for MspParser {
     fn default() -> Self {
         Self::new()
     }
